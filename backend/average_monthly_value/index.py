@@ -89,6 +89,7 @@ def handler(event, context):
     end_date = '2023-07-01'
     query_params = event.get("queryStringParameters", {})
     c_id = query_params.get("c_id")
+    print(c_id)
     if c_id is not None:
         average_monthly_value = retrieve_average_monthly_value(c_id,start_date,end_date)
         return {
