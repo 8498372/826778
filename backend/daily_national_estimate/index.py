@@ -86,6 +86,7 @@ def handler(event, context):
     end_date = '2023-07-01'
     query_params = event.get("queryStringParameters", {})
     c_id = query_params.get("c_id")
+    print(c_id == None)
     if c_id is not None:
         daily_national_estimate_value = daily_national_estimate(c_id,start_date,end_date)
         return {

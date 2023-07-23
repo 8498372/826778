@@ -92,6 +92,7 @@ def handler(event, context):
     
     query_params = event.get("queryStringParameters", {})
     c_id = query_params.get("c_id")
+    print(c_id == None)
     if c_id is not None:
         variance_metric_b_value = variance_metric_b(c_id,start_date,end_date)
         return {
