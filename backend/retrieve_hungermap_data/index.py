@@ -64,6 +64,9 @@ class DataEntry(Base):
     market_access_id = Column(Integer, ForeignKey('metrics.id'))
     market_access = relationship('Metric', foreign_keys=[market_access_id])
     
+    health_access_id = Column(Integer, ForeignKey('metrics.id'))
+    health_access = relationship('Metric', foreign_keys=[health_access_id])
+    
     
 def deserialize_json_to_models(json_data):
     data_e = json.loads(json_data)
@@ -75,19 +78,34 @@ def deserialize_json_to_models(json_data):
 
         region = Region(id=data['region']['id'], name=data['region']['name'],
                         population=data['region']['population'])
-
-        fcs_metric = Metric(metric_name='fcs', people=data['metrics']['fcs']['people'],
+        if(hasattr(data['metrics'], 'fcs')):
+            fcs_metric = Metric(metric_name='fcs', people=data['metrics']['fcs']['people'],
                             prevalence=data['metrics']['fcs']['prevalence'])
-
-        rcsi_metric = Metric(metric_name='rcsi', people=data['metrics']['rcsi']['people'],
+        else:   
+            fcs_metric = Metric(metric_name='fcs', people=0,
+                            prevalence=0)
+        if(hasattr(data['metrics'], 'rcsi')):
+            rcsi_metric = Metric(metric_name='rcsi', people=data['metrics']['rcsi']['people'],
                             prevalence=data['metrics']['rcsi']['prevalence'])
-
-        market_access_metric = Metric(metric_name='marketAccess', people=data['metrics']['marketAccess']['people'],
+        else:
+            rcsi_metric = Metric(metric_name='rcsi', people=0,
+                            prevalence=0)
+        if(hasattr(data['metrics'], 'marketAccess')):
+            market_access_metric = Metric(metric_name='marketAccess', people=data['metrics']['marketAccess']['people'],
                                     prevalence=data['metrics']['marketAccess']['prevalence'])
+        else:
+            market_access_metric = Metric(metric_name='marketAccess', people=0,
+                                    prevalence=0)
+        if(hasattr(data['metrics'], 'healthAccess')):
+            health_access_metric = Metric(metric_name='healthAccess', people=data['metrics']['healthAccess']['people'],
+                                    prevalence=data['metrics']['healthAccess']['prevalence'])
+        else:
+            health_access_metric = Metric(metric_name='healthAccess', people=0,
+                                    prevalence=0)
 
         data_entry = DataEntry(date=data['date'], data_type=data['dataType'],
                             country=country, region=region, fcs=fcs_metric, rcsi=rcsi_metric,
-                            market_access=market_access_metric)
+                            market_access=market_access_metric,health_access=health_access_metric)
         entries.append(data_entry)
 
     return entries

@@ -64,27 +64,36 @@ class DataEntry(Base):
     market_access_id = Column(Integer, ForeignKey('metrics.id'))
     market_access = relationship('Metric', foreign_keys=[market_access_id])
     
+    health_access_id = Column(Integer, ForeignKey('metrics.id'))
+    health_access = relationship('Metric', foreign_keys=[health_access_id])
+    
     
 def variance_metric_b(country_code,start_date,end_date):
     print(f"daily_national_estimate: {country_code}")
     engine = create_engine(connection_string, connect_args={'connect_timeout': 1})
     Session = sessionmaker(bind=engine)
     session = Session()
-    result = session.query(func.sum(Metric.prevalence), func.date_trunc('day', DataEntry.date)).\
-            join(Country, DataEntry.country_id == Country.id).\
-            join(Metric, DataEntry.fcs_id == Metric.id).\
-            filter(Country.iso3 == country_code).\
-            filter((DataEntry.data_type > start_date) | (DataEntry.data_type < end_date)).\
-            group_by(func.date_trunc('day', DataEntry.date)).all()
+    result = session.query(
+    DataEntry.date,
+        func.avg(Metric.prevalence).label('average_prevalence'),
+        func.variance(Metric.prevalence).label('prevalence_variance')
+    ).join(Metric, DataEntry.fcs_id == Metric.id).join(Country).filter(
+        DataEntry.date >= start_date,
+        DataEntry.date < end_date
+    ).group_by(DataEntry.date).order_by(DataEntry.date.desc()).all()
     
-    sum_value = 0
-    squared_diff_sum = 0
-    total_sum_value = sum(sum_value for sum_value, month in result)
-    mean = total_sum_value / len(result)
-    squared_diff_sum = sum((sum_value - mean) ** 2 for sum_value, month in result)
-    
-    variance = squared_diff_sum / (len(result) - 1)
-    return variance
+    formatted_result = [
+        {
+            'date': row.date.strftime('%Y-%m-%d'),
+            'average_prevalence': float(row.average_prevalence),
+            'prevalence_variance': float(row.prevalence_variance)
+        }
+        for row in result
+    ]
+
+    json_result = json.dumps(formatted_result, indent=4)
+
+    return json_result
 
 def handler(event, context):
     start_date = '2022-06-01'
