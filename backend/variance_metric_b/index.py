@@ -103,11 +103,18 @@ def handler(event, context):
     if query_params is not None:
         if 'c_id' in query_params:
             c_id = query_params.get("c_id")
-            average_monthly_value = variance_metric_b(c_id,start_date,end_date)
-            return {
-                "statusCode": 200,
-                "body": average_monthly_value
-            }
+            variance_metric_b_value = variance_metric_b(c_id,start_date,end_date)
+            result = json.loads(variance_metric_b_value)
+            if result:
+                return {
+                    "statusCode": 200,
+                    "body": variance_metric_b_value
+                }
+            else:
+                return {
+                    "statusCode": 404,
+                    "body": 'Country not found'
+                }
         else:
             return {
                 "statusCode": 400,
