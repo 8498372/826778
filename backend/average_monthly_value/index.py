@@ -4,7 +4,7 @@ import json
 from sqlalchemy import Float, ForeignKey, create_engine, Column, Integer, String, Text, DateTime
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, relationship
-from sqlalchemy import func
+from sqlalchemy import func, desc
 import datetime
 import psycopg2
 
@@ -81,40 +81,50 @@ def retrieve_average_monthly_value(country_code,start_date,end_date):
         func.avg(DataEntry.rcsi_id).label('avg_rcsi'),
         func.avg(DataEntry.market_access_id).label('avg_market_access'),
         func.avg(DataEntry.health_access_id).label('avg_health_access')
-    ).join(Region).group_by(Region.name, func.date_trunc('month', DataEntry.date)).all()
+    ).join(Region).join(Country).filter(
+        Country.iso3 == country_code,
+        DataEntry.date >= start_date,
+        DataEntry.date <= end_date
+    ).group_by(Region.name, func.date_trunc('month', DataEntry.date)).order_by(desc(func.date_trunc('month', DataEntry.date))).all()
+
     
     formatted_result = [
         {
             'region_name': row.name,
             'month': row.month.strftime('%Y-%m'),
-            'avg_fcs': row.avg_fcs,
-            'avg_rcsi': row.avg_rcsi,
-            'avg_market_access': row.avg_market_access,
-            'avg_health_access': row.avg_health_access
+            'avg_fcs': float(row.avg_fcs),
+            'avg_rcsi': float(row.avg_rcsi),
+            'avg_market_access': float(row.avg_market_access),
+            'avg_health_access': float(row.avg_health_access)
         }
         for row in result
     ]
 
     json_result = json.dumps(formatted_result, indent=4)
-    return result
+    return json_result
 
 def handler(event, context):
     start_date = '2022-06-01'
     end_date = '2023-07-01'
     query_params = event.get("queryStringParameters", {})
-    c_id = query_params.get("c_id")
-    print(c_id == None)
-    if c_id is not None:
-        average_monthly_value = retrieve_average_monthly_value(c_id,start_date,end_date)
-        return {
-            "statusCode": 200,
-            "body": average_monthly_value
-        }
+    if query_params is not None:
+        if 'c_id' in query_params:
+            c_id = query_params.get("c_id")
+            average_monthly_value = retrieve_average_monthly_value(c_id,start_date,end_date)
+            return {
+                "statusCode": 200,
+                "body": average_monthly_value
+            }
+        else:
+            return {
+                "statusCode": 400,
+                "body": "Bad request"
+            }
     else:
-        return {
-            "statusCode": 400,
-            "body": "Bad request"
-        }
+            return {
+                "statusCode": 400,
+                "body": "Bad request"
+            }
     
 
 
