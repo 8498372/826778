@@ -95,26 +95,29 @@ def variance_metric_b(country_code,start_date,end_date):
 
     return json_result
 
+    
 def handler(event, context):
     start_date = '2022-06-01'
     end_date = '2023-07-01'
-    
     query_params = event.get("queryStringParameters", {})
-    c_id = query_params.get("c_id")
-    print(c_id == None)
-    if c_id is not None:
-        variance_metric_b_value = variance_metric_b(c_id,start_date,end_date)
-        return {
-            "statusCode": 200,
-            "body": variance_metric_b_value
-        }
+    if query_params is not None:
+        if 'c_id' in query_params:
+            c_id = query_params.get("c_id")
+            average_monthly_value = variance_metric_b(c_id,start_date,end_date)
+            return {
+                "statusCode": 200,
+                "body": average_monthly_value
+            }
+        else:
+            return {
+                "statusCode": 400,
+                "body": "Bad request"
+            }
     else:
-        return {
-            "statusCode": 400,
-            "body": "Bad request"
-        }
-    
-
+            return {
+                "statusCode": 400,
+                "body": "Bad request"
+            }
 
 def lambda_handler(*args):
     return handler(*args)

@@ -4,7 +4,7 @@ import json
 from sqlalchemy import Float, ForeignKey, create_engine, Column, Integer, String, Text, DateTime
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, relationship
-from sqlalchemy import func
+from sqlalchemy import funcs
 import datetime
 import psycopg2
 
@@ -96,19 +96,24 @@ def handler(event, context):
     start_date = '2022-06-01'
     end_date = '2023-07-01'
     query_params = event.get("queryStringParameters", {})
-    c_id = query_params.get("c_id")
-    print(c_id == None)
-    if c_id is not None:
-        daily_national_estimate_value = daily_national_estimate(c_id,start_date,end_date)
-        return {
-            "statusCode": 200,
-            "body": daily_national_estimate_value
-        }
+    if query_params is not None:
+        if 'c_id' in query_params:
+            c_id = query_params.get("c_id")
+            average_monthly_value = daily_national_estimate(c_id,start_date,end_date)
+            return {
+                "statusCode": 200,
+                "body": average_monthly_value
+            }
+        else:
+            return {
+                "statusCode": 400,
+                "body": "Bad request"
+            }
     else:
-        return {
-            "statusCode": 400,
-            "body": "Bad request"
-        }
+            return {
+                "statusCode": 400,
+                "body": "Bad request"
+            }
     
 
 
