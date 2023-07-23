@@ -30,7 +30,7 @@ jobs:
 
     - name: Build average monthly value
       run: |
-        python backend/build.py backend/average_monthly_value/
+        python backend/build.py backend/average_monthly_value
 
     - name: Update Lambda Function
       run: |
