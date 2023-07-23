@@ -1,4 +1,4 @@
-name: Update Lambda Functions
+name: Update average_monthly_value Lambda
 
 on:
   push:
