@@ -63,6 +63,9 @@ class DataEntry(Base):
 
     market_access_id = Column(Integer, ForeignKey('metrics.id'))
     market_access = relationship('Metric', foreign_keys=[market_access_id])
+
+    health_access_id = Column(Integer, ForeignKey('metrics.id'))
+    health_access = relationship('Metric', foreign_keys=[health_access_id])
     
     
 def retrieve_average_monthly_value(country_code,start_date,end_date):
@@ -71,18 +74,15 @@ def retrieve_average_monthly_value(country_code,start_date,end_date):
     Session = sessionmaker(bind=engine)
     session = Session()
     print("get average monthly from database")
-    result = session.query(func.count(DataEntry.date), func.date_trunc('month', DataEntry.date)).\
-            join(Country, DataEntry.country_id == Country.id).\
-            filter(Country.iso3 == country_code).\
-            filter((DataEntry.data_type > start_date) | (DataEntry.data_type < end_date)).\
-            group_by(func.date_trunc('month', DataEntry.date)).all()
-    
-    if(len(result) > 0):
-        sum_value = 0
-        for count, month in result:
-            sum_value += count
-        return sum_value/len(result)
-    return 0
+    result = session.query(
+        Region.name,
+        func.date_trunc('month', DataEntry.date).label('month'),
+        func.avg(DataEntry.fcs_id).label('avg_fcs'),
+        func.avg(DataEntry.rcsi_id).label('avg_rcsi'),
+        func.avg(DataEntry.market_access_id).label('avg_market_access'),
+        func.avg(DataEntry.health_access_id).label('avg_health_access')
+    ).join(Region).group_by(Region.name, func.date_trunc('month', DataEntry.date)).all()
+    return result
 
 def handler(event, context):
     start_date = '2022-06-01'
