@@ -99,7 +99,6 @@ def retrieve_average_monthly_value(country_code,start_date,end_date):
         }
         for row in result
     ]
-
     json_result = json.dumps(formatted_result, indent=4)
     return json_result
 
@@ -111,10 +110,18 @@ def handler(event, context):
         if 'c_id' in query_params:
             c_id = query_params.get("c_id")
             average_monthly_value = retrieve_average_monthly_value(c_id,start_date,end_date)
-            return {
-                "statusCode": 200,
-                "body": average_monthly_value
-            }
+            result = json.loads(average_monthly_value)
+            if result:
+                return {
+                    "statusCode": 200,
+                    "body": average_monthly_value
+                }
+            else:
+                return {
+                    "statusCode": 404,
+                    "body": 'Country not found'
+                }
+
         else:
             return {
                 "statusCode": 400,
