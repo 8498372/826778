@@ -82,6 +82,20 @@ def retrieve_average_monthly_value(country_code,start_date,end_date):
         func.avg(DataEntry.market_access_id).label('avg_market_access'),
         func.avg(DataEntry.health_access_id).label('avg_health_access')
     ).join(Region).group_by(Region.name, func.date_trunc('month', DataEntry.date)).all()
+    
+    formatted_result = [
+        {
+            'region_name': row.name,
+            'month': row.month.strftime('%Y-%m'),
+            'avg_fcs': row.avg_fcs,
+            'avg_rcsi': row.avg_rcsi,
+            'avg_market_access': row.avg_market_access,
+            'avg_health_access': row.avg_health_access
+        }
+        for row in result
+    ]
+
+    json_result = json.dumps(formatted_result, indent=4)
     return result
 
 def handler(event, context):
