@@ -1,0 +1,131 @@
+# Ignore Terraform state files and backups
+*.tfstate
+*.tfstate.backup
+
+# Ignore .terraform directory containing downloaded provider plugins and local state
+.terraform/
+
+# Ignore .terraform.lock.hcl file
+terraform/.terraform.lock.hcl
+
+# Ignore any files generated during the Terraform execution
+terraform.tfstate*
+
+# Ignore override files as they are usually used to override resources during Terraform execution
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Ignore crash.log files written by Terraform if a command crashes
+crash.log
+
+# Ignore .tfvars files containing sensitive information
+*.auto.tfvars
+*.auto.tfvars.json
+*.tfvars
+*.tfvars.json
+
+# Ignore CLI configuration files
+.terraformrc
+terraform.rc
+
+# Ignore all .terraform directories in children directories
+**/.terraform/
+
+# Ignore all .terraform.lock.hcl files in children directories
+**/terraform.lock.hcl
+
+# Ignore all terraform.tfstate* files in children directories
+**/terraform.tfstate*
+
+# Ignore all override files in children directories
+**/override.tf
+**/override.tf.json
+**/*_override.tf
+**/*_override.tf.json
+
+# Ignore all crash.log files in children directories
+**/crash.log
+
+# Ignore all .tfvars files in children directories
+**/*.auto.tfvars
+**/*.auto.tfvars.json
+**/*.tfvars
+**/*.tfvars.json
+
+# Ignore all CLI configuration files in children directories
+**/.terraformrc
+**/terraform.rc
+
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Distribution / packaging
+dist/
+build/
+eggs/
+*.egg-info/
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# PyInstaller
+#  Usually these files are written by a python script from a template
+#  before PyInstaller builds the exe, so as to inject date/other infos into it.
+*.manifest
+*.spec
+
+# Unit test / coverage reports
+htmlcov/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+
+# Translations
+*.mo
+*.pot
+
+# Django stuff:
+*.log
+local_settings.py
+
+# Flask stuff:
+instance/
+.webassets-cache
+
+# Scrapy stuff:
+.scrapy
+
+# Sphinx documentation
+docs/_build/
+
+# PyBuilder
+target/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# IPython
+profile_default/
+ipython_config.py
+
+# matplotlib
+*.pdf
+
+*.zip
+
+**/python/
+**/backend/env/
