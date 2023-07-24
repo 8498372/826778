@@ -79,7 +79,8 @@ def variance_metric_b(country_code,start_date,end_date):
         func.variance(Metric.prevalence).label('prevalence_variance')
     ).join(Metric, DataEntry.fcs_id == Metric.id).join(Country).filter(
         DataEntry.date >= start_date,
-        DataEntry.date < end_date
+        DataEntry.date < end_date,
+        Country.iso3 == country_code
     ).group_by(DataEntry.date).order_by(DataEntry.date.desc()).all()
     
     formatted_result = [
