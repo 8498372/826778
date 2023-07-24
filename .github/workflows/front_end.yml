@@ -41,3 +41,9 @@ jobs:
 
     - name: Deploy app build to S3 bucket
       run: aws s3 sync ./frontend/build/ s3://826778 --delete
+
+    - name: Invalidate CloudFront cache
+      uses: aws-actions/cloudfront-invalidate-cache@v1
+      with:
+        cloudfront-distribution-id: E3QS1C09Y0BDX2
+        paths: /index.html  # Adjust if your default root object has a different path
