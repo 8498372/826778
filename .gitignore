@@ -129,3 +129,5 @@ ipython_config.py
 
 **/python/
 **/backend/env/
+
+**/node_modules/
