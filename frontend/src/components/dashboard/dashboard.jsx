@@ -1,4 +1,4 @@
-import React, { Component, useEffect, useState  } from "react";
+import React, { Component} from "react";
 import "./dashboard.css";
 import axios from 'axios';
 
@@ -6,15 +6,8 @@ import axios from 'axios';
 import {
   Row,
   Col,
-  Icon,
-  Collapsible,
-  CollapsibleItem,
-  Collection,
-  CollectionItem,
   Tab,
   Tabs,
-  Modal,
-  Table
 } from "react-materialize";
 
 
@@ -24,8 +17,6 @@ import {
   VictoryChart,
   VictoryBar,
   VictoryAxis,
-  VictoryTheme,
-  VictoryPie,
   VictoryTooltip,
   VictoryLegend,
   VictoryGroup,
@@ -33,41 +24,6 @@ import {
 } from "victory";
 
 
-
-//components
-import Marketing from "./marketing/marketing";
-
-//images
-import Cheers from "../../images/cheers.png";
-
-//data
-const dataQuarterly = [
-  { quarter: 1, earnings: 12000 },
-  { quarter: 2, earnings: 16500 },
-  { quarter: 3, earnings: 14250 },
-  { quarter: 4, earnings: 19000 }
-];
-
-const dataMonthly = [
-  { month: 1, earnings: 2000 },
-  { month: 2, earnings: 6500 },
-  { month: 3, earnings: 4250 },
-  { month: 4, earnings: 3000 },
-  { month: 5, earnings: 2500 },
-  { month: 6, earnings: 1800 },
-  { month: 7, earnings: 2200 },
-  { month: 8, earnings: 2700 },
-  { month: 9, earnings: 1900 },
-  { month: 10, earnings: 3300 },
-  { month: 11, earnings: 5400 },
-  { month: 12, earnings: 8000 }
-];
-
-const dataPieChart = [
-  { x: 1, y: 3.8, label: "Winery 38%" },
-  { x: 2, y: 1.8, label: "Lodge 18%" },
-  { x: 3, y: 4.4, label: "Hot Springs 44%" }
-];
 class Dashboard extends Component {
   constructor(props) {
     super(props);
@@ -120,7 +76,6 @@ class Dashboard extends Component {
     return <div>Loading...</div>;
   }
 
-  const regions_m1 = [...new Set([...data_amv_col, ...data_amv_bfa].map((item) => item.region_name))];
   const months_m1 = [...new Set([...data_amv_col, ...data_amv_bfa].map((item) => item.month))];
   const day_m2 = [...new Set([...data_dme_col, ...data_dme_bfa].map((item) => item.date))];
   const day_col_m3 = [...new Set([...data_vmb_col].map((item) => item.date))];

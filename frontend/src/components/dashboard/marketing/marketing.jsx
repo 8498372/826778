@@ -13,7 +13,6 @@ import {
   VictoryLegend,
   VictoryLine,
   VictoryClipContainer,
-  VictoryBar,
   VictoryTheme
 } from "victory";
 
