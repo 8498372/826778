@@ -1,7 +1,5 @@
 import React, { Component } from "react";
 import "./App.css";
-// import ReactDOM from "react-dom";
-import * as V from "victory";
 
 //components
 import Header from "./components/header/header";
