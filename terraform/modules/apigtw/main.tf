@@ -127,4 +127,40 @@ resource "aws_lambda_permission" "apigw_processor_variance_metric_b" {
   source_arn = "${aws_api_gateway_rest_api.api_gateway.execution_arn}/*/*/*"
 }
 
+resource "aws_api_gateway_stage" "average_monthly_value_stage" {
+  deployment_id = aws_api_gateway_deployment.average_monthly_value.id
+  rest_api_id   = aws_api_gateway_rest_api.api_gateway.id
+  stage_name    = "DEV" # Replace with the desired stage name
+
+  # Enable CORS for the stage
+  tags = {
+    "method.response.header.Access-Control-Allow-Origin" = "'*'"
+    "method.response.header.Access-Control-Allow-Methods" = "'GET,OPTIONS'"
+  }
+}
+
+resource "aws_api_gateway_stage" "daily_national_estimate_stage" {
+  deployment_id = aws_api_gateway_deployment.daily_national_estimate.id
+  rest_api_id   = aws_api_gateway_rest_api.api_gateway.id
+  stage_name    = "DEV" # Replace with the desired stage name
+
+  # Enable CORS for the stage
+  tags = {
+    "method.response.header.Access-Control-Allow-Origin" = "'*'"
+    "method.response.header.Access-Control-Allow-Methods" = "'GET,OPTIONS'"
+  }
+}
+
+resource "aws_api_gateway_stage" "variance_metric_b_stage" {
+  deployment_id = aws_api_gateway_deployment.variance_metric_b.id
+  rest_api_id   = aws_api_gateway_rest_api.api_gateway.id
+  stage_name    = "DEV" # Replace with the desired stage name
+
+  # Enable CORS for the stage
+  tags = {
+    "method.response.header.Access-Control-Allow-Origin" = "'*'"
+    "method.response.header.Access-Control-Allow-Methods" = "'GET,OPTIONS'"
+  }
+}
+
 #stop - variance_metric_b

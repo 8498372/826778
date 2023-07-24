@@ -114,22 +114,38 @@ def handler(event, context):
             if result:
                 return {
                     "statusCode": 200,
+                    "headers": {
+                        "Access-Control-Allow-Origin": "*",  # Replace "*" with your desired origin or specific domains
+                        "Access-Control-Allow-Headers": "Content-Type",  # Replace with the allowed request headers
+                    },
                     "body": average_monthly_value
                 }
             else:
                 return {
                     "statusCode": 404,
+                    "headers": {
+                        "Access-Control-Allow-Origin": "*",  # Replace "*" with your desired origin or specific domains
+                        "Access-Control-Allow-Headers": "Content-Type",  # Replace with the allowed request headers
+                    },
                     "body": 'Country not found'
                 }
 
         else:
             return {
                 "statusCode": 400,
+                 "headers": {
+                    "Access-Control-Allow-Origin": "*",  # Replace "*" with your desired origin or specific domains
+                    "Access-Control-Allow-Headers": "Content-Type",  # Replace with the allowed request headers
+                },
                 "body": "Bad request"
             }
     else:
             return {
                 "statusCode": 400,
+                 "headers": {
+                    "Access-Control-Allow-Origin": "*",  # Replace "*" with your desired origin or specific domains
+                    "Access-Control-Allow-Headers": "Content-Type",  # Replace with the allowed request headers
+                },
                 "body": "Bad request"
             }
     
