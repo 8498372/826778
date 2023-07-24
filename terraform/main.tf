@@ -34,3 +34,7 @@ module "apigtw" {
   daily_national_estimate_lambda_arn    = module.lambdas.daily_national_estimate
   variance_metric_b_lambda_arn    = module.lambdas.variance_metric_b
 }
+
+module "fe" {
+  source = "./modules/fe"
+}
